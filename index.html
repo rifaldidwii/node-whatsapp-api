@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <title>Whatsapp API</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-4">Whatsapp API</h1>
+        <img class="img-thumbnail" src="" alt="QR Code" id="qrcode">
+        <h4>Logs:</h4>
+        <ul class="list-group mt-3" id="logs">
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"
+        integrity="sha512-aC5ZfKOuGRUiJCv+E/EIWsj49E02BQpuLQbixZe+16Lm1R6AepHZA1xvY92XBQNNbwQoqG4DXCGxwoxBFb5Q1A=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous">
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function (event) {
+            const socket = io();
+            const img = document.getElementById('qrcode');
+            const ul = document.getElementById('logs');
+
+            socket.on('message', (msg) => {
+                const li = document.createElement('li');
+                li.appendChild(document.createTextNode(msg));
+                li.classList.add('list-group-item');
+                ul.appendChild(li);
+
+                if (msg == 'Client is authenticated...' || msg == 'Client is ready...') {
+                    img.style.visibility = 'hidden';
+                }
+            });
+
+            socket.on('qr', (src) => {
+                img.src = src;
+            });
+        });
+    </script>
+</body>
+
+</html>
